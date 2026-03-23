@@ -150,7 +150,7 @@ if submit:
         st.markdown("---")
         st.markdown("### Agende sua Reunião Estratégica:")
         # Troque 'SEU-LINK' pelo seu link real do Calendly
-        calendly_url = "https://calendly.com/SEU-LINK" 
+        calendly_url = "https://calendly.com/vasconcelosmaia/30min" 
         
         components.html(
             f"""
@@ -169,7 +169,7 @@ st.markdown("<h4 style='text-align:center; margin-top:30px; color:white;'>Precis
 
 # Links (Troque o SEU-LINK pelo seu usuário do Calendly)
 link_wa = "https://wa.me/5583996498366?text=Olá! Gostaria de falar com um especialista sobre inventário."
-link_cal = "https://calendly.com/SEU-LINK" 
+link_cal = "https://calendly.com/vasconcelosmaia/30min" 
 
 html_botoes = f"""
 <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
