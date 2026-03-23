@@ -64,7 +64,7 @@ with col2:
 
 # 2. Títulos (fora de qualquer container ou form)
 st.markdown('<h1 class="main-title">Inventário Extrajudicial</h1>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">Descubra em 1 minuto se o seu caso é extrajudicial.</p>', unsafe_allow_html=True)
+
 
 # -----------------------------
 # INTEGRAÇÕES (SAFE)
