@@ -94,7 +94,7 @@ with st.form("meu_form"):
         bens = st.radio("Existem bens?", ["Sim", "Não"])
         testamento = st.radio("Existe testamento?", ["Não", "Sim"])
     
-    lgpd = st.checkbox("Autorizo contato profissional.")
+    lgpd = st.checkbox("Autorizo o tratamento dos meus dados de acordo com a LGPD, e o contato profissional.")
     submit = st.form_submit_button("ANALISAR AGORA")
 
 if submit:
@@ -127,16 +127,49 @@ if submit:
         )
 
 st.markdown('</div>', unsafe_allow_html=True)
+# -----------------------------
+# FIM DO FORMULÁRIO (FECHANDO A DIV)
+# -----------------------------
+st.markdown('</div>', unsafe_allow_html=True)
 
 # -----------------------------
-# BOTÕES FINAIS (FOOTER CTA)
+# SEÇÃO DE AGENDAMENTO (FORA DO FORMULÁRIO)
 # -----------------------------
-st.markdown("""<h4 style='text-align:center; margin-top:30px;'>Ainda tem dúvidas?</h4>""", unsafe_allow_html=True)
+st.markdown("---")
+st.markdown("<h3 style='text-align:center;'>Agende sua Consultoria Estratégica</h3>", unsafe_allow_html=True)
+
+# Tenta carregar o Widget do Calendly
+# IMPORTANTE: Troque 'SEU-LINK' pelo seu link real do Calendly
+calendly_url = "https://calendly.com/SEU-LINK" 
+
+components.html(
+    f"""
+    <div class="calendly-inline-widget" data-url="{calendly_url}" style="min-width:320px;height:630px;"></div>
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    """,
+    height=650,
+)
+
+# -----------------------------
+# BOTÕES DE RODAPÉ (SEMPRE VISÍVEIS)
+# -----------------------------
+st.markdown("""<h4 style='text-align:center; margin-top:30px;'>Fale diretamente conosco:</h4>""", unsafe_allow_html=True)
+
 st.markdown(f"""
 <div class="cta-container">
-    <a href="https://calendly.com/SEU-LINK" target="_blank" class="btn-calendly">🗓️ AGENDAR REUNIÃO</a>
-    <a href="https://wa.me/5583996498366?text=Gostaria de falar com um especialista sobre inventário." target="_blank" class="btn-whatsapp">💬 WHATSAPP AGORA</a>
+    <a href="{calendly_url}" target="_blank" class="btn-calendly">🗓️ ABRIR CALENDÁRIO COMPLETO</a>
+    <a href="https://wa.me/5583996498366?text=Olá, vim pelo site e gostaria de uma análise de inventário." 
+       target="_blank" class="btn-whatsapp">💬 CHAMAR NO WHATSAPP</a>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown(f"""<div class="footer"><hr>© {datetime.now().year} Vasconcelos Maia | João Pessoa - PB</div>""", unsafe_allow_html=True)
+# -----------------------------
+# RODAPÉ FINAL
+# -----------------------------
+st.markdown(f"""
+<div class="footer">
+    <hr>
+    © {datetime.now().year} Vasconcelos Maia | Soluções Jurídicas<br>
+    | Atendimento em todo o Brasil
+</div>
+""", unsafe_allow_html=True)
