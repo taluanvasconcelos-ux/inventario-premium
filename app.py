@@ -164,33 +164,20 @@ st.markdown("<h4 style='text-align:center; margin-top:30px; color:white;'>Precis
 link_wa = "https://wa.me/5583996498366?text=Olá! Vim pelo site e gostaria de falar com um especialista sobre inventário."
 link_cal = "https://calendly.com/SEU-LINK" # Lembre de trocar pelo seu link real
 
-st.markdown(f"""
+# --- BOTÕES DE RODAPÉ (VERSÃO FINAL SEM ERRO) ---
+st.markdown("<h4 style='text-align:center; margin-top:30px; color:white;'>Precisa de ajuda imediata?</h4>", unsafe_allow_html=True)
+
+# Links (Troque o SEU-LINK pelo seu usuário do Calendly)
+link_wa = "https://wa.me/5583996498366?text=Olá! Gostaria de falar com um especialista sobre inventário."
+link_cal = "https://calendly.com/SEU-LINK" 
+
+html_botoes = f"""
 <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
-    <a href="{link_wa}" target="_blank" style="
-        background-color: #25D366; 
-        color: white !important; 
-        padding: 12px 24px; 
-        border-radius: 8px; 
-        text-decoration: none; 
-        font-weight: bold;
-        display: inline-block;
-        min-width: 200px;
-        text-align: center;
-    ">💬 WHATSAPP AGORA</a>
-    
-    <a href="{link_cal}" target="_blank" style="
-        background-color: #0A2540; 
-        color: white !important; 
-        padding: 12px 24px; 
-        border-radius: 8px; 
-        text-decoration: none; 
-        font-weight: bold;
-        display: inline-block;
-        min-width: 200px;
-        text-align: center;
-        border: 1px solid #333;
-    ">🗓️ MARCAR REUNIÃO AGORA</a>
+    <a href="{link_wa}" target="_blank" style="background-color: #25D366; color: white !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; min-width: 210px; text-align: center;">💬 WHATSAPP AGORA</a>
+    <a href="{link_cal}" target="_blank" style="background-color: #0A2540; color: white !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; min-width: 210px; text-align: center; border: 1px solid #333;">🗓️ MARCAR REUNIÃO AGORA</a>
 </div>
-""", unsafe_allow_html=True)
+"""
+
+st.markdown(html_botoes, unsafe_allow_html=True)
 
 st.markdown(f"""<div class="footer"><hr>© {datetime.now().year} Vasconcelos Maia | BRASIL</div>""", unsafe_allow_html=True)
