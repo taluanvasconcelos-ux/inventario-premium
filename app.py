@@ -2,39 +2,6 @@ import streamlit as st
 import requests
 import csv
 
-import gspread
-import json
-from oauth2client.service_account import ServiceAccountCredentials
-from datetime import datetime
-from streamlit import secrets
-
-def conectar_google_sheets():
-    creds_dict = json.loads(secrets["GOOGLE_CREDENTIALS"])
-
-    scope = [
-        "https://spreadsheets.google.com/feeds",
-        "https://www.googleapis.com/auth/drive"
-    ]
-
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-    client = gspread.authorize(creds)
-
-    sheet = client.open("Leads Inventário").sheet1
-
-    return sheet
-
-def salvar_lead_google(nome, whatsapp, cidade, estado, resultado):
-    sheet = conectar_google_sheets()
-
-    sheet.append_row([
-        nome,
-        whatsapp,
-        cidade,
-        estado,
-        resultado,
-        datetime.now().strftime("%d/%m/%Y %H:%M")
-    ])
-
 # -----------------------------
 # CONFIG
 # -----------------------------
