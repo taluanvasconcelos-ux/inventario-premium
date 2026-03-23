@@ -66,10 +66,6 @@ with col2:
 st.markdown('<h1 class="main-title">Inventário Extrajudicial</h1>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Descubra em 1 minuto se o seu caso é extrajudicial.</p>', unsafe_allow_html=True)
 
-# 3. Início do formulário (ele agora não tem borda, então não vai cortar nada)
-with st.form("form_analise"):
-    st.markdown("### 📍 Pré-Análise do Caso")
-    # ... campos do formulário ...
 # -----------------------------
 # INTEGRAÇÕES (SAFE)
 # -----------------------------
