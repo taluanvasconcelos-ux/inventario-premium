@@ -58,7 +58,7 @@ st.markdown("""
 # LOGO E CABEÇALHO
 # -----------------------------
 # Diminuímos o espaço das colunas laterais para a logo não 'esticar' o layout
-col1, col2, col3 = st.columns([1.2, 2, 1.5])
+col1, col2, col3 = st.columns([1, 1.2, 1])
 with col2:
     # use_container_width=True faz com que ela respeite o tamanho da coluna
     st.image("logo.png", use_container_width=True)
