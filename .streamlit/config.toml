@@ -1,0 +1,15 @@
+[theme]
+# "auto" segue o sistema do usuário. "dark" força o preto sempre.
+base="auto"
+# A cor principal dos botões e detalhes (usei um tom azul escuro profissional)
+primaryColor="#0A2540"
+# Cor do fundo em modo claro
+backgroundColor="#FFFFFF"
+# Cor do fundo dos campos de texto
+secondaryBackgroundColor="#F0F2F6"
+# Cor do texto
+textColor="#31333F"
+
+[client]
+# Esconde o menu de opções e o botão de deploy para um visual mais limpo
+toolbarMode = "minimal"
