@@ -157,12 +157,39 @@ st.markdown('</div>', unsafe_allow_html=True)
 # -----------------------------
 # BOTÕES DE RODAPÉ (SEMPRE VISÍVEIS)
 # -----------------------------
-st.markdown("<h4 style='text-align:center; margin-top:30px;'>Precisa de ajuda imediata?</h4>", unsafe_allow_html=True)
+# --- BOTÕES DE RODAPÉ (VERSÃO ROBUSTA) ---
+st.markdown("<h4 style='text-align:center; margin-top:30px; color:white;'>Precisa de ajuda imediata?</h4>", unsafe_allow_html=True)
+
+# Definimos os links
+link_wa = "https://wa.me/5583996498366?text=Olá! Vim pelo site e gostaria de falar com um especialista sobre inventário."
+link_cal = "https://calendly.com/SEU-LINK" # Lembre de trocar pelo seu link real
+
 st.markdown(f"""
-<div class="cta-container">
-    <a href="https://wa.me/5583996498366?text=Olá! Vim pelo site e gostaria de falar com um especialista sobre meu caso de inventário." 
-       target="_blank" class="btn-whatsapp">💬 WHATSAPP AGORA</a>
-    <a href="https://calendly.com/SEU-LINK" target="_blank" class="btn-calendly">🗓️ MARCAR REUNIÃO AGORA</a>
+<div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+    <a href="{link_wa}" target="_blank" style="
+        background-color: #25D366; 
+        color: white !important; 
+        padding: 12px 24px; 
+        border-radius: 8px; 
+        text-decoration: none; 
+        font-weight: bold;
+        display: inline-block;
+        min-width: 200px;
+        text-align: center;
+    ">💬 WHATSAPP AGORA</a>
+    
+    <a href="{link_cal}" target="_blank" style="
+        background-color: #0A2540; 
+        color: white !important; 
+        padding: 12px 24px; 
+        border-radius: 8px; 
+        text-decoration: none; 
+        font-weight: bold;
+        display: inline-block;
+        min-width: 200px;
+        text-align: center;
+        border: 1px solid #333;
+    ">🗓️ MARCAR REUNIÃO AGORA</a>
 </div>
 """, unsafe_allow_html=True)
 
