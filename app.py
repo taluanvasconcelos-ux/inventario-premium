@@ -37,7 +37,7 @@ col1, col2, col3 = st.columns([1,1.5,1])
 with col2:
     st.image("logo.png", use_container_width=True)
 
-st.markdown('<h1 class="main-title">Inventário em Cartório</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-title">Inventário Extrajudicial</h1>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Descubra em 1 minuto se o seu caso é extrajudicial.</p>', unsafe_allow_html=True)
 
 # -----------------------------
