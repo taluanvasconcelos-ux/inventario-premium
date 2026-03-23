@@ -164,14 +164,6 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 # -----------------------------
 # BOTÕES DE RODAPÉ (SEMPRE VISÍVEIS)
-# -----------------------------
-# --- BOTÕES DE RODAPÉ (VERSÃO ROBUSTA) ---
-st.markdown("<h4 style='text-align:center; margin-top:30px; color:white;'>Precisa de ajuda imediata?</h4>", unsafe_allow_html=True)
-
-# Definimos os links
-link_wa = "https://wa.me/5583996498366?text=Olá! Vim pelo site e gostaria de falar com um especialista sobre inventário."
-link_cal = "https://calendly.com/SEU-LINK" # Lembre de trocar pelo seu link real
-
 # --- BOTÕES DE RODAPÉ (VERSÃO FINAL SEM ERRO) ---
 st.markdown("<h4 style='text-align:center; margin-top:30px; color:white;'>Precisa de ajuda imediata?</h4>", unsafe_allow_html=True)
 
