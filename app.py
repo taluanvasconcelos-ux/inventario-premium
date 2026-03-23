@@ -21,6 +21,7 @@ st.set_page_config(
 st.markdown("""
 <style>
     .main-title { text-align: center; font-size: 36px; font-weight: 700; color: #1a1a1a; margin-bottom: 5px; }
+    .subtitle { text-align: center; font-size: 18px; color: #666; margin-bottom: 30px; }
     .cta-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
     .btn-calendly { background-color: #0A2540; color: white !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
     .btn-whatsapp { background-color: #25D366; color: white !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
