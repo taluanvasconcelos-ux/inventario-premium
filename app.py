@@ -180,4 +180,4 @@ html_botoes = f"""
 
 st.markdown(html_botoes, unsafe_allow_html=True)
 
-st.markdown(f"""<div class="footer"><hr>© {datetime.now().year} Vasconcelos Maia | BRASIL</div>""", unsafe_allow_html=True)
+st.markdown(f"""<div class="footer"><hr>© {datetime.now().year} Vasconcelos Maia | Soluções Jurídicas - Atendimento em todo Brasil e Exterior</div>""", unsafe_allow_html=True)
