@@ -57,15 +57,19 @@ st.markdown("""
 # -----------------------------
 # LOGO E CABEÇALHO
 # -----------------------------
-# Diminuímos o espaço das colunas laterais para a logo não 'esticar' o layout
+# 1. Logo
 col1, col2, col3 = st.columns([1, 1.2, 1])
 with col2:
-    # use_container_width=True faz com que ela respeite o tamanho da coluna
     st.image("logo.png", use_container_width=True)
 
+# 2. Títulos (fora de qualquer container ou form)
 st.markdown('<h1 class="main-title">Inventário Extrajudicial</h1>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Descubra em 1 minuto se o seu caso é extrajudicial.</p>', unsafe_allow_html=True)
 
+# 3. Início do formulário (ele agora não tem borda, então não vai cortar nada)
+with st.form("form_analise"):
+    st.markdown("### 📍 Pré-Análise do Caso")
+    # ... campos do formulário ...
 # -----------------------------
 # INTEGRAÇÕES (SAFE)
 # -----------------------------
