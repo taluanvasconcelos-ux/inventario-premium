@@ -1,265 +1,166 @@
 import streamlit as st
 import requests
 import csv
+import gspread
+import json
+from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 
 # -----------------------------
-# CONFIG
+# CONFIGURAÇÃO DA PÁGINA
 # -----------------------------
 st.set_page_config(
-    page_title="Inventário Extrajudicial",
+    page_title="Inventário Extrajudicial | Vasconcelos Maia",
     layout="centered",
     page_icon="⚖️"
 )
 
 # -----------------------------
-# CSS
+# CSS PREMIUM
 # -----------------------------
 st.markdown("""
 <style>
-.block-container {
-    padding-top: 2rem;
+.main-title { text-align: center; font-size: 38px; font-weight: 700; color: #1a1a1a; }
+.subtitle { text-align: center; font-size: 19px; color: #555; margin-bottom: 30px; }
+.cta-container { display: flex; justify-content: center; margin: 20px 0; gap: 10px; flex-wrap: wrap; }
+.cta-button { 
+    background-color: #0A2540; color: white !important; padding: 14px 28px; 
+    border-radius: 10px; text-decoration: none; font-weight: bold; text-align: center;
 }
-
-.main-title {
-    text-align: center;
-    font-size: 42px;
-    font-weight: 700;
+.cta-whatsapp { 
+    background-color: #25D366; color: white !important; padding: 14px 28px; 
+    border-radius: 10px; text-decoration: none; font-weight: bold; text-align: center;
 }
-
-.subtitle {
-    text-align: center;
-    font-size: 20px;
-    color: #555;
-}
-
-.cta {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-.cta a {
-    background-color: #0A2540;
-    color: white;
-    padding: 14px 28px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.section-box {
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 10px;
-    border: 1px solid #eee;
-    margin-top: 20px;
+.section-box { 
+    background-color: #ffffff; padding: 25px; border-radius: 15px; 
+    border: 1px solid #eee; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 </style>
 """, unsafe_allow_html=True)
 
 # -----------------------------
-# LOGO
+# LOGO E HERO
 # -----------------------------
 col1, col2, col3 = st.columns([1,2,1])
 with col2:
-    st.image("logo.png", width=200)
+    st.image("logo.png", use_container_width=True)
 
-# -----------------------------
-# HERO
-# -----------------------------
-st.markdown("""
-<h1 class='main-title'>Inventário Extrajudicial com Segurança Jurídica</h1>
-<p class='subtitle'>
-Análise rápida com especialista. Evite processo judicial desnecessário.
-</p>
-""", unsafe_allow_html=True)
+st.markdown("<h1 class='main-title'>Inventário Extrajudicial com Segurança</h1>", unsafe_allow_html=True)
+st.markdown("<p class='subtitle'>Evite processos demorados. Descubra se seu caso pode ser resolvido em cartório.</p>", unsafe_allow_html=True)
 
-# CTA PRINCIPAL
-st.markdown("""
-<div class="cta">
-    <a href="https://calendly.com/SEU-LINK" target="_blank">
-       AGENDAR REUNIÃO COM UM ESPECIALISTA
-    </a>
-</div>
-""", unsafe_allow_html=True)
-
-st.caption("Ou preencha o formulário para análise")
-
-#whatsapp
-
-st.markdown("""
-<div style="text-align:center; margin-top:15px;">
-    <a href="wa.me/5583996498366"
-    target="_blank"
-    style="
-        background-color:#25D366;
-        color:white;
-        padding:14px 28px;
-        border-radius:10px;
-        text-decoration:none;
-        font-weight:bold;
-        display:inline-block;
-    ">
-        FALAR PELO WHATSAPP AGORA
-    </a>
+# BOTÕES DE CONTATO RÁPIDO
+st.markdown(f"""
+<div class="cta-container">
+    <a href="https://calendly.com/SEU-LINK" target="_blank" class="cta-button">🗓️ AGENDAR REUNIÃO</a>
+    <a href="https://wa.me/5583996498366?text=Olá! Gostaria de uma análise sobre meu caso de Inventário." target="_blank" class="cta-whatsapp">💬 WHATSAPP AGORA</a>
 </div>
 """, unsafe_allow_html=True)
 
 # -----------------------------
-# AUTORIDADE
-# -----------------------------
-st.markdown("""
-<div style="text-align:center; margin-top:20px;">
-✔️ Atendimento em todo o Brasil<br>
-✔️ Especialistas em inventário extrajudicial<br>
-✔️ Atendimento rápido e seguro
-</div>
-""", unsafe_allow_html=True)
-
-# -----------------------------
-# TELEGRAM
+# INTEGRAÇÕES (TELEGRAM E GOOGLE)
 # -----------------------------
 TOKEN = "8678540615:AAEY_XhZMuVSOD1FGjz0YRMooIlual9xNPc"
 CHAT_ID = "8703766596"
 
 def enviar_telegram(msg):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    requests.post(url, data={"chat_id": CHAT_ID, "text": msg})
+    try: requests.post(url, data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "Markdown"})
+    except: pass
+
+def salvar_lead_google(nome, whatsapp, cidade, estado, resultado):
+    try:
+        # Puxa credenciais dos Secrets do Streamlit Cloud
+        creds_dict = json.loads(st.secrets["GOOGLE_CREDENTIALS"])
+        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+        client = gspread.authorize(creds)
+        
+        # Abre a planilha (Certifique-se que ela está compartilhada com o e-mail do bot)
+        sheet = client.open("Leads Inventário").sheet1
+        sheet.append_row([nome, whatsapp, cidade, estado, resultado, datetime.now().strftime("%d/%m/%Y %H:%M")])
+    except Exception as e:
+        st.error(f"Erro ao salvar na planilha: {e}")
 
 # -----------------------------
-# SALVAR LEAD
-# -----------------------------
-def salvar_lead(nome, whatsapp, cidade, estado, resultado):
-    with open("leads.csv", "a", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow([nome, whatsapp, cidade, estado, resultado])
-
-# -----------------------------
-# IBGE
+# DADOS IBGE
 # -----------------------------
 @st.cache_data
 def get_estados():
     url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
-    estados = requests.get(url).json()
-    estados = sorted(estados, key=lambda x: x["nome"])
-    return {e["nome"]: e["sigla"] for e in estados}
+    estados_raw = requests.get(url).json()
+    estados_raw = sorted(estados_raw, key=lambda x: x["nome"])
+    return {e["nome"]: e["sigla"] for e in estados_raw}
 
 @st.cache_data
 def get_cidades(uf):
     url = f"https://servicodados.ibge.gov.br/api/v1/localidades/estados/{uf}/municipios"
-    cidades = requests.get(url).json()
-    return [c["nome"] for c in cidades]
-
-estados = get_estados()
+    return [c["nome"] for c in requests.get(url).json()]
 
 # -----------------------------
-# FORMULÁRIO
+# FORMULÁRIO DE ANÁLISE
 # -----------------------------
 st.markdown('<div class="section-box">', unsafe_allow_html=True)
-
-st.subheader("Análise especializada de inventário extrajudicial")
+st.subheader("📝 Formulário de Pré-Análise")
 
 nome = st.text_input("Nome completo")
-whatsapp = st.text_input("WhatsApp")
+whatsapp = st.text_input("WhatsApp com DDD")
 email = st.text_input("E-mail")
 
-estado_nome = st.selectbox("Estado", list(estados.keys()), index=None, placeholder="Selecione o estado")
+estados_dict = get_estados()
+estado_nome = st.selectbox("Estado", list(estados_dict.keys()), index=None, placeholder="Selecione o estado")
 
+cidade = None
 if estado_nome:
-    uf = estados[estado_nome]
-    cidades = get_cidades(uf)
+    cidades = get_cidades(estados_dict[estado_nome])
     cidade = st.selectbox("Cidade", cidades, index=None, placeholder="Selecione a cidade")
-else:
-    cidade = None
 
-inventario = st.radio("O inventário já foi iniciado?", ["Sim", "Não"], index=None)
+# Perguntas Jurídicas
+c1, c2 = st.columns(2)
+with c1:
+    herdeiro = st.radio("Existe herdeiro incapaz (menor)?", ["Não", "Sim"], index=0)
+    consenso = st.radio("Todos estão de acordo?", ["Sim", "Não"], index=0)
+with c2:
+    bens = st.radio("Existem bens a partilhar?", ["Sim", "Não"], index=0)
+    testamento = st.radio("Existe testamento?", ["Não", "Sim", "Não sei"], index=0)
 
-data = st.date_input("Data do falecimento", format="DD/MM/YYYY")
+lgpd = st.checkbox("Autorizo o tratamento dos dados para contato profissional.")
 
-herdeiro = st.radio("Existe herdeiro incapaz?", ["Sim", "Não"], index=None)
-
-consenso = st.radio("Todos concordam com a divisão?", ["Sim", "Não"], index=None)
-
-testamento = st.radio("Existe testamento?", ["Sim", "Não", "Não sei"], index=None)
-
-bens = st.radio("Existem bens?", ["Sim", "Não"], index=None)
-
-exterior = st.radio("Herdeiro no exterior?", ["Sim", "Não"], index=None)
-
-dividas = st.radio("Existem dívidas?", ["Sim", "Não", "Não sei"], index=None)
-
-lgpd = st.checkbox("Autorizo o tratamento dos dados para contato.")
-
-# -----------------------------
-# BOTÃO
-# -----------------------------
-if st.button("Analisar caso"):
-
-    if not lgpd:
-        st.error("É necessário aceitar a LGPD.")
+if st.button("ANALISAR MEU CASO"):
+    if not lgpd or not nome or not whatsapp:
+        st.error("Por favor, preencha os dados obrigatórios e aceite a LGPD.")
     else:
-
+        # Lógica de Classificação
         if herdeiro == "Sim" or consenso == "Não":
-            resultado = "Necessário inventário judicial"
-            st.warning(resultado)
+            resultado = "Necessário Inventário Judicial"
+            st.warning(f"### {resultado}")
         elif bens == "Não":
-            resultado = "Sem bens — oportunidade administrativa"
-            st.info(resultado)
+            resultado = "Sem bens - Inventário Negativo"
+            st.info(f"### {resultado}")
         else:
-            resultado = "Forte viabilidade para inventário extrajudicial"
-            st.success(resultado)
+            resultado = "Forte viabilidade para Extrajudicial (Cartório)"
+            st.success(f"### {resultado}")
+            st.balloons()
 
-        # SALVAR
-        salvar_lead(nome, whatsapp, cidade, estado_nome, resultado)
-
-        # TELEGRAM
-        msg = f"""
-🚨 NOVO LEAD
-
-🔥 Status: {resultado}
-
-👤 Nome: {nome}
-📱 WhatsApp: {whatsapp}
-📍 {cidade} - {estado_nome}
-"""
-        enviar_telegram(msg)
-
-        # CTA FINAL
-        st.markdown("""
-        <div class="cta">
-            <a href="https://calendly.com/SEU-LINK" target="_blank">
-                AGENDAR REUNIÃO COM UM ESPECIALISTA
-            </a>
-        </div>
-        """, unsafe_allow_html=True)
+        # EXECUÇÃO DAS INTEGRAÇÕES
+        with st.spinner("Salvando seus dados..."):
+            # 1. Google Sheets
+            salvar_lead_google(nome, whatsapp, cidade, estado_nome, resultado)
+            
+            # 2. Telegram
+            msg_telegram = f"🚀 *Novo Lead:*\n\n*Nome:* {nome}\n*Whats:* {whatsapp}\n*Local:* {cidade}-{estado_nome}\n*Resultado:* {resultado}"
+            enviar_telegram(msg_telegram)
+            
+            st.success("Dados enviados! Nossa equipe entrará em contato.")
 
 st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown("""
-<div style="text-align:center; margin-top:15px;">
-    <a href="wa.me/5583996498366"
-    target="_blank"
-    style="
-        background-color:#25D366;
-        color:white;
-        padding:14px 28px;
-        border-radius:10px;
-        text-decoration:none;
-        font-weight:bold;
-        display:inline-block;
-    ">
-        FALAR PELO WHATSAPP AGORA
-    </a>
-</div>
-""", unsafe_allow_html=True)
 
 # -----------------------------
 # RODAPÉ
 # -----------------------------
-
-st.markdown("""
+st.markdown(f"""
 <hr>
 <p style='text-align:center; font-size:12px; color:gray;'>
-© 2026 Vasconcelos Maia | Soluções Jurídicas. Todos os direitos reservados.  
+© {datetime.now().year} Vasconcelos Maia | Soluções Jurídicas<br>
+João Pessoa/PB • Atendimento em todo o Brasil
 </p>
 """, unsafe_allow_html=True)
