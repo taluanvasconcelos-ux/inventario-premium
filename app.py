@@ -136,8 +136,8 @@ st.markdown(f"""
 <div class="cta-container">
     <a href="https://wa.me/5583996498366?text=Olá! Vim pelo site e gostaria de falar com um especialista sobre meu caso de inventário." 
        target="_blank" class="btn-whatsapp">💬 WHATSAPP AGORA</a>
-    <a href="https://calendly.com/SEU-LINK" target="_blank" class="btn-calendly">🗓️ VER AGENDA COMPLETA</a>
+    <a href="https://calendly.com/SEU-LINK" target="_blank" class="btn-calendly">🗓️ MARCAR REUNIÃO AGORA</a>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown(f"""<div class="footer"><hr>© {datetime.now().year} Vasconcelos Maia | João Pessoa - PB</div>""", unsafe_allow_html=True)
+st.markdown(f"""<div class="footer"><hr>© {datetime.now().year} Vasconcelos Maia | BRASIL</div>""", unsafe_allow_html=True)
