@@ -59,13 +59,16 @@ st.markdown(f"""
 # -----------------------------
 # INTEGRAÇÕES (TELEGRAM E GOOGLE)
 # -----------------------------
-TOKEN = "8678540615:AAEY_XhZMuVSOD1FGjz0YRMooIlual9xNPc"
-CHAT_ID = "8703766596"
+# MODO SEGURO (Sem vazamento)
+TOKEN = st.secrets["TELEGRAM_TOKEN"]
+CHAT_ID = st.secrets["TELEGRAM_CHAT_ID"]
 
 def enviar_telegram(msg):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    try: requests.post(url, data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "Markdown"})
-    except: pass
+    try: 
+        requests.post(url, data={"chat_id": CHAT_ID, "text": msg, "parse_mode": "Markdown"})
+    except Exception as e:
+        st.error(f"Erro no Telegram: {e}")
 
 def salvar_lead_google(nome, whatsapp, cidade, estado, resultado):
     try:
