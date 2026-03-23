@@ -20,23 +20,47 @@ st.set_page_config(
 # -----------------------------
 st.markdown("""
 <style>
-    .main-title { text-align: center; font-size: 36px; font-weight: 700; color: #1a1a1a; margin-bottom: 5px; }
-    .subtitle { text-align: center; font-size: 18px; color: #666; margin-bottom: 30px; }
-    .cta-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
-    .btn-calendly { background-color: #0A2540; color: white !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
-    .btn-whatsapp { background-color: #25D366; color: white !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
-    .section-box { background-color: #ffffff; padding: 30px; border-radius: 15px; border: 1px solid #eee; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    .footer { text-align: center; color: #888; font-size: 12px; margin-top: 50px; }
+    /* Remove espaços vazios no topo e laterais */
     .block-container {
-    padding-top: 1rem !important;}
+        padding-top: 1rem !important;
+        padding-bottom: 0rem !important;
+        max-width: 50rem !important;
+    }
+    
+    /* Remove a barra branca/espaço em cima do formulário */
+    [data-testid="stForm"] {
+        margin-top: -20px !important;
+        padding: 20px !important;
+    }
+
+    /* Ajusta o título para não empurrar o form para baixo */
+    .main-title { 
+        text-align: center; 
+        font-size: 32px; 
+        font-weight: 700; 
+        margin-bottom: 0px !important; 
+    }
+    
+    .subtitle { 
+        text-align: center; 
+        font-size: 16px; 
+        color: #666; 
+        margin-bottom: 10px !important; 
+    }
+
+    /* Esconde o cabeçalho padrão do Streamlit para ganhar espaço */
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
 # -----------------------------
 # LOGO E CABEÇALHO
 # -----------------------------
-col1, col2, col3 = st.columns([1,1.5,1])
+# Diminuímos o espaço das colunas laterais para a logo não 'esticar' o layout
+col1, col2, col3 = st.columns([1.5, 2, 1.5])
 with col2:
+    # use_container_width=True faz com que ela respeite o tamanho da coluna
     st.image("logo.png", use_container_width=True)
 
 st.markdown('<h1 class="main-title">Inventário Extrajudicial</h1>', unsafe_allow_html=True)
