@@ -114,41 +114,42 @@ with st.form("form_analise"):
 # -----------------------------
 # LÓGICA DE PROCESSAMENTO
 # -----------------------------
+# -----------------------------
+# LÓGICA DE PROCESSAMENTO
+# -----------------------------
 if submit:
-    # Adicionámos o 'email' na verificação de campos vazios
+    # Verifica campos vazios
     if None in [herdeiro, consenso, bens, testamento] or not nome or not whatsapp or not email:
         st.error("⚠️ Por favor, preencha todos os campos (incluindo o e-mail) antes de prosseguir.")
     elif not lgpd:
         st.error("⚠️ Você precisa autorizar o contato (LGPD) para ver o resultado.")
     else:
-        # Lógica de classificação (mantém-se a mesma)
-        if herdeiro == "Sim" or consenso == "Não":
-            resultado = "Judicial"
-        elif bens == "Não":
-            resultado = "Inventário Negativo"
-        else:
-        # Lógica de classificação
-        if herdeiro == "Sim" or consenso == "Não":
-            resultado = "Judicial"
-        elif bens == "Não":
-            resultado = "Inventário Negativo"
-        else:
-            resultado = "Extrajudicial"
+        # Tudo ok! Começa o processamento
+        import time
         
-        data_hora = datetime.now().strftime("%d/%m/%Y %H:%M")
+        with st.spinner('⚖️ Analisando legislação e critérios para o seu inventário...'):
+            # Lógica de classificação
+            if herdeiro == "Sim" or consenso == "Não":
+                resultado = "Judicial"
+            elif bens == "Não":
+                resultado = "Inventário Negativo"
+            else:
+                resultado = "Extrajudicial"
+            
+            data_hora = datetime.now().strftime("%d/%m/%Y %H:%M")
+            time.sleep(2.5) # Efeito de carregamento
         
-        # 1. Salva no Google (com as colunas certas que você tem)
+        # 1. Enviar para Google Sheets e Telegram
         salvar_google([nome, whatsapp, email, resultado, data_hora])
         
-        # 2. Envia para o Telegram
         msg = f"🚀 *Novo Lead:*\n👤 *Nome:* {nome}\n📧 *E-mail:* {email}\n📱 *Whats:* {whatsapp}\n⚖️ *Status:* {resultado}"
         enviar_telegram(msg)
         
-       # 3. Feedback visual
+        # 2. Mostrar Resultado
         st.success(f"### Resultado: {resultado}")
-        st.balloons()
+        st.snow()
         
-        # 4. MOSTRAR CALENDLY
+        # 3. MOSTRAR CALENDLY
         st.markdown("---")
         st.markdown("### Agende sua Reunião Estratégica:")
         calendly_url = "https://calendly.com/vasconcelosmaia/30min" 
@@ -161,14 +162,11 @@ if submit:
             height=650,
         )
 
-st.markdown('</div>', unsafe_allow_html=True)
-
 # -----------------------------
-# BOTÕES DE RODAPÉ (SEMPRE VISÍVEIS)
-# --- BOTÕES DE RODAPÉ (VERSÃO FINAL SEM ERRO) ---
-st.markdown("<h4 style='text-align:center; margin-top:30px; color:white;'>Precisa de ajuda imediata?</h4>", unsafe_allow_html=True)
+# BOTÕES DE RODAPÉ (FORA DO IF SUBMIT)
+# -----------------------------
+st.markdown("<h4 style='text-align:center; margin-top:30px;'>Precisa de ajuda imediata?</h4>", unsafe_allow_html=True)
 
-# Links (Troque o SEU-LINK pelo seu usuário do Calendly)
 link_wa = "https://wa.me/5583996498366?text=Olá! Gostaria de falar com um especialista sobre inventário."
 link_cal = "https://calendly.com/vasconcelosmaia/30min" 
 
@@ -178,7 +176,5 @@ html_botoes = f"""
     <a href="{link_cal}" target="_blank" style="background-color: #0A2540; color: white !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; min-width: 210px; text-align: center; border: 1px solid #333;">🗓️ MARCAR REUNIÃO AGORA</a>
 </div>
 """
-
 st.markdown(html_botoes, unsafe_allow_html=True)
-
-st.markdown(f"""<div class="footer"><hr>© {datetime.now().year} Vasconcelos Maia | Soluções Jurídicas - Atendimento em todo Brasil e Exterior</div>""", unsafe_allow_html=True)
+st.markdown(f"""<div style='text-align:center;'><hr>© {datetime.now().year} Vasconcelos Maia | Soluções Jurídicas  - Atendimento em todo Brasil e Exterior</div>""", unsafe_allow_html=True)
