@@ -144,11 +144,9 @@ if submit:
         msg = f"🚀 *Novo Lead:*\n👤 *Nome:* {nome}\n📧 *E-mail:* {email}\n📱 *Whats:* {whatsapp}\n⚖️ *Status:* {resultado}"
         enviar_telegram(msg)
         
-       # --- AQUI ENTRA O ITEM 2 (EFEITO DE CARREGAMENTO) ---
-        import time # Certifique-se de que tem o 'import time' no topo do arquivo
-        
-        with st.spinner('⚖️ Analisando legislação e critérios para o seu inventário...'):
-            time.sleep(2.5) # O tempo (em segundos) que o "carregando" vai aparecer
+       # 3. Feedback visual
+        st.success(f"### Resultado: {resultado}")
+        st.balloons()
         
         # 4. MOSTRAR CALENDLY
         st.markdown("---")
