@@ -1,542 +1,264 @@
 import streamlit as st
-
 import requests
-
 import csv
 
-
-
 # -----------------------------
-
-# CONFIGURAÇÃO DA PÁGINA
-
+# CONFIG
 # -----------------------------
-
 st.set_page_config(
-
     page_title="Inventário Extrajudicial",
-
     layout="centered",
-
     page_icon="⚖️"
-
 )
 
-
-
 # -----------------------------
-
-# CSS PREMIUM
-
+# CSS
 # -----------------------------
-
 st.markdown("""
-
 <style>
+.block-container {
+    padding-top: 2rem;
+}
 
 .main-title {
-
     text-align: center;
-
-    font-size: 34px;
-
+    font-size: 42px;
     font-weight: 700;
-
 }
-
-
 
 .subtitle {
-
     text-align: center;
-
-    font-size: 18px;
-
+    font-size: 20px;
     color: #555;
-
 }
-
-
 
 .cta {
-
     display: flex;
-
     justify-content: center;
-
     margin: 20px 0;
-
 }
-
-
 
 .cta a {
-
     background-color: #0A2540;
-
     color: white;
-
-    padding: 12px 24px;
-
-    border-radius: 8px;
-
+    padding: 14px 28px;
+    border-radius: 10px;
     text-decoration: none;
-
-    font-weight: 600;
-
+    font-weight: bold;
 }
-
-
-
-.cta-green {
-
-    display: flex;
-
-    justify-content: center;
-
-    margin: 20px 0;
-
-}
-
-
-
-.cta-green a {
-
-    background-color: #2E7D32;
-
-    color: white;
-
-    padding: 12px 24px;
-
-    border-radius: 8px;
-
-    text-decoration: none;
-
-    font-weight: 600;
-
-}
-
-
 
 .section-box {
-
     background-color: #ffffff;
-
     padding: 25px;
-
     border-radius: 10px;
-
     border: 1px solid #eee;
-
     margin-top: 20px;
-
 }
-
 </style>
-
 """, unsafe_allow_html=True)
 
-
-
 # -----------------------------
-
-# LOGO CENTRAL
-
+# LOGO
 # -----------------------------
-
 col1, col2, col3 = st.columns([1,2,1])
-
 with col2:
-
     st.image("logo.png", width=200)
 
-
-
 # -----------------------------
-
-# HERO SECTION
-
+# HERO
 # -----------------------------
+st.markdown("""
+<h1 class='main-title'>Inventário Extrajudicial com Segurança Jurídica</h1>
+<p class='subtitle'>
+Análise rápida com especialista. Evite processo judicial desnecessário.
+</p>
+""", unsafe_allow_html=True)
 
-st.markdown('<div class="main-title">Inventário em Cartório de Forma Extrajudicial</div>', unsafe_allow_html=True)
+# CTA PRINCIPAL
+st.markdown("""
+<div class="cta">
+    <a href="https://calendly.com/SEU-LINK" target="_blank">
+       AGENDAR REUNIÃO COM UM ESPECIALISTA
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
-st.markdown('<div class="subtitle">Descubra em poucos minutos se seu caso pode ser resolvido sem processo judicial</div>', unsafe_allow_html=True)
+st.caption("Ou preencha o formulário para análise")
 
-
-
-# CTA topo
+#whatsapp
 
 st.markdown("""
-<div style="text-align:center; margin-top:20px;">
-    <a href="https://calendly.com/SEU-LINK" target="_blank"
+<div style="text-align:center; margin-top:15px;">
+    <a href="wa.me/message/YZO4OMPNQZNSE1?text=Olá,%20quero%20analisar%20meu%20caso%20de%20inventário"
+    target="_blank"
     style="
-        background-color:#0A2540;
+        background-color:#25D366;
         color:white;
         padding:14px 28px;
         border-radius:10px;
         text-decoration:none;
         font-weight:bold;
-        font-size:16px;
         display:inline-block;
     ">
-        AGENDAR AGORA UMA REUNIÃO
+        FALAR PELO WHATSAPP AGORA
     </a>
 </div>
 """, unsafe_allow_html=True)
 
-
+# -----------------------------
+# AUTORIDADE
+# -----------------------------
+st.markdown("""
+<div style="text-align:center; margin-top:20px;">
+✔️ Atendimento em todo o Brasil<br>
+✔️ Especialistas em inventário extrajudicial<br>
+✔️ Atendimento rápido e seguro
+</div>
+""", unsafe_allow_html=True)
 
 # -----------------------------
-
-# FUNÇÕES TELEGRAM
-
+# TELEGRAM
 # -----------------------------
-
 TOKEN = "8678540615:AAEY_XhZMuVSOD1FGjz0YRMooIlual9xNPc"
-
 CHAT_ID = "8703766596"
 
-
-
-def enviar_telegram(mensagem):
-
+def enviar_telegram(msg):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-
-    payload = {"chat_id": CHAT_ID, "text": mensagem}
-
-    requests.post(url, data=payload)
-
-
+    requests.post(url, data={"chat_id": CHAT_ID, "text": msg})
 
 # -----------------------------
-
-# FUNÇÃO SALVAR LEAD CSV
-
+# SALVAR LEAD
 # -----------------------------
-
 def salvar_lead(nome, whatsapp, cidade, estado, resultado):
-
-    with open("leads.csv", mode="a", newline="", encoding="utf-8") as file:
-
-        writer = csv.writer(file)
-
+    with open("leads.csv", "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
         writer.writerow([nome, whatsapp, cidade, estado, resultado])
 
-
-
 # -----------------------------
-
-# FUNÇÕES IBGE
-
+# IBGE
 # -----------------------------
-
 @st.cache_data
-
 def get_estados():
-
     url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
-
     estados = requests.get(url).json()
-
-    estados_ordenados = sorted(estados, key=lambda x: x["nome"])
-
-    return {e["nome"]: e["sigla"] for e in estados_ordenados}
-
-
+    estados = sorted(estados, key=lambda x: x["nome"])
+    return {e["nome"]: e["sigla"] for e in estados}
 
 @st.cache_data
-
 def get_cidades(uf):
-
     url = f"https://servicodados.ibge.gov.br/api/v1/localidades/estados/{uf}/municipios"
-
     cidades = requests.get(url).json()
-
     return [c["nome"] for c in cidades]
 
-
-
-estados_dict = get_estados()
-
-
+estados = get_estados()
 
 # -----------------------------
-
-# FORMULÁRIO COMPLETO
-
+# FORMULÁRIO
 # -----------------------------
-
 st.markdown('<div class="section-box">', unsafe_allow_html=True)
 
-st.subheader("Análise gratuita do seu caso")
-
-
+st.subheader("Análise especializada de inventário extrajudicial")
 
 nome = st.text_input("Nome completo")
-
 whatsapp = st.text_input("WhatsApp")
-
 email = st.text_input("E-mail")
 
-
-
-estado_nome = st.selectbox(
-
-    "Estado",
-
-    list(estados_dict.keys()),
-
-    index=None,
-
-    placeholder="Selecione o estado"
-
-)
-
-
+estado_nome = st.selectbox("Estado", list(estados.keys()), index=None, placeholder="Selecione o estado")
 
 if estado_nome:
-
-    uf = estados_dict[estado_nome]
-
+    uf = estados[estado_nome]
     cidades = get_cidades(uf)
-
-    cidade = st.selectbox(
-
-        "Cidade",
-
-        cidades,
-
-        index=None,
-
-        placeholder="Selecione a cidade"
-
-    )
-
+    cidade = st.selectbox("Cidade", cidades, index=None, placeholder="Selecione a cidade")
 else:
-
     cidade = None
 
+inventario = st.radio("O inventário já foi iniciado?", ["Sim", "Não"], index=None)
 
+data = st.date_input("Data do falecimento", format="DD/MM/YYYY")
 
-inventario = st.radio(
+herdeiro = st.radio("Existe herdeiro incapaz?", ["Sim", "Não"], index=None)
 
-    "O inventário já foi iniciado?",
+consenso = st.radio("Todos concordam com a divisão?", ["Sim", "Não"], index=None)
 
-    ["Sim", "Não"],
+testamento = st.radio("Existe testamento?", ["Sim", "Não", "Não sei"], index=None)
 
-    index=None
+bens = st.radio("Existem bens?", ["Sim", "Não"], index=None)
 
-)
+exterior = st.radio("Herdeiro no exterior?", ["Sim", "Não"], index=None)
 
+dividas = st.radio("Existem dívidas?", ["Sim", "Não", "Não sei"], index=None)
 
-
-data_falecimento = st.date_input(
-
-    "Data do falecimento",
-
-    format="DD/MM/YYYY"
-
-)
-
-
-
-herdeiro = st.radio(
-
-    "Existe herdeiro incapaz?",
-
-    ["Sim", "Não"],
-
-    index=None
-
-)
-
-
-
-consenso = st.radio(
-
-    "Todos concordam com a divisão?",
-
-    ["Sim", "Não"],
-
-    index=None
-
-)
-
-
-
-testamento = st.radio(
-
-    "Existe testamento?",
-
-    ["Sim", "Não", "Não sei"],
-
-    index=None
-
-)
-
-
-
-bens = st.radio(
-
-    "Existem bens?",
-
-    ["Sim", "Não"],
-
-    index=None
-
-)
-
-
-
-exterior = st.radio(
-
-    "Herdeiro no exterior?",
-
-    ["Sim", "Não"],
-
-    index=None
-
-)
-
-
-
-dividas = st.radio(
-
-    "Existem dívidas?",
-
-    ["Sim", "Não", "Não sei"],
-
-    index=None
-
-)
-
-
-
-lgpd = st.checkbox(
-
-    "Autorizo o tratamento dos meus dados para análise e contato profissional."
-
-)
-
-
+lgpd = st.checkbox("Autorizo o tratamento dos dados para contato.")
 
 # -----------------------------
-
-# BOTÃO ANALISAR
-
+# BOTÃO
 # -----------------------------
-
 if st.button("Analisar caso"):
 
-
-
     if not lgpd:
-
-        st.error("É necessário autorizar o uso dos dados.")
-
+        st.error("É necessário aceitar a LGPD.")
     else:
 
-
-
-        # Lógica simplificada de resultado
-
         if herdeiro == "Sim" or consenso == "Não":
-
             resultado = "Necessário inventário judicial"
-
+            st.warning(resultado)
         elif bens == "Não":
-
-            resultado = "Sem bens – avaliar medidas administrativas"
-
+            resultado = "Sem bens — oportunidade administrativa"
+            st.info(resultado)
         else:
-
-            resultado = "Possível inventário extrajudicial"
-
-
-
-        st.write("---")
-
-        if "extrajudicial" in resultado.lower():
-
+            resultado = "Forte viabilidade para inventário extrajudicial"
             st.success(resultado)
 
-        elif "judicial" in resultado.lower():
-
-            st.warning(resultado)
-
-        else:
-
-            st.info(resultado)
-
-
-
-        # Salvar lead
-
+        # SALVAR
         salvar_lead(nome, whatsapp, cidade, estado_nome, resultado)
 
+        # TELEGRAM
+        msg = f"""
+🚨 NOVO LEAD
 
+🔥 Status: {resultado}
 
-        # Enviar Telegram
-
-        mensagem = f"""
-
-📥 Novo Lead
-
-
-
-Nome: {nome}
-
-WhatsApp: {whatsapp}
-
-Cidade: {cidade} - {estado_nome}
-
-
-
-Resultado: {resultado}
-
+👤 Nome: {nome}
+📱 WhatsApp: {whatsapp}
+📍 {cidade} - {estado_nome}
 """
+        enviar_telegram(msg)
 
-        enviar_telegram(mensagem)
-
-
-
-        # CTA final
-
+        # CTA FINAL
         st.markdown("""
-
-        <div class="cta-green">
-
+        <div class="cta">
             <a href="https://calendly.com/SEU-LINK" target="_blank">
-
-                Agendar atendimento com Especialista
-
+                AGENDAR REUNIÃO COM UM ESPECIALISTA
             </a>
-
         </div>
-
         """, unsafe_allow_html=True)
-
-
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-
-
-# -----------------------------
-
-# RODAPÉ
-
-# -----------------------------
-
 st.markdown("""
+<div style="text-align:center; margin-top:15px;">
+    <a href="wa.me/message/YZO4OMPNQZNSE1?text=Olá,%20quero%20analisar%20meu%20caso%20de%20inventário"
+    target="_blank"
+    style="
+        background-color:#25D366;
+        color:white;
+        padding:14px 28px;
+        border-radius:10px;
+        text-decoration:none;
+        font-weight:bold;
+        display:inline-block;
+    ">
+        FALAR PELO WHATSAPP AGORA
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
+# -----------------------------
+# RODAPÉ
+# -----------------------------
+st.markdown("""
 <hr>
-
 <p style='text-align:center; font-size:12px; color:gray;'>
-
 © 2026 Vasconcelos Maia | Soluções Jurídicas. Todos os direitos reservados.  
-WhatsApp: +55 (83) 99649-8366
-
 </p>
-
 """, unsafe_allow_html=True)
