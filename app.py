@@ -170,6 +170,6 @@ st.markdown(f"""
 <div class="footer">
     <hr>
     © {datetime.now().year} Vasconcelos Maia | Soluções Jurídicas<br>
-    | Atendimento em todo o Brasil
+    | Atendimento em todo o Brasil -
 </div>
 """, unsafe_allow_html=True)
