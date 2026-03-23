@@ -126,31 +126,33 @@ if submit:
             resultado = "Judicial"
         elif bens == "Não":
             resultado = "Inventário Negativo"
+      else:
+        # Lógica de classificação
+        if herdeiro == "Sim" or consenso == "Não":
+            resultado = "Judicial"
+        elif bens == "Não":
+            resultado = "Inventário Negativo"
         else:
             resultado = "Extrajudicial"
         
         data_hora = datetime.now().strftime("%d/%m/%Y %H:%M")
         
-        # ATUALIZADO: Enviando o e-mail para o Google Sheets
-        # Certifique-se de que a sua folha tem colunas suficientes
+        # 1. Salva no Google (com as colunas certas que você tem)
         salvar_google([nome, whatsapp, email, resultado, data_hora])
         
-        # ATUALIZADO: Enviando o e-mail para o Telegram
+        # 2. Envia para o Telegram
         msg = f"🚀 *Novo Lead:*\n👤 *Nome:* {nome}\n📧 *E-mail:* {email}\n📱 *Whats:* {whatsapp}\n⚖️ *Status:* {resultado}"
         enviar_telegram(msg)
         
-        st.success(f"### Resultado: {resultado}")
-        st.balloons()
+       # --- AQUI ENTRA O ITEM 2 (EFEITO DE CARREGAMENTO) ---
+        import time # Certifique-se de que tem o 'import time' no topo do arquivo
         
-        # Salvando Leads
-        data_hora = datetime.now().strftime("%d/%m/%Y %H:%M")
-        salvar_google([nome, whatsapp, e-mail, cidade, estado, resultado, data_hora])
-        enviar_telegram(f"🚀 *Novo Lead:* {nome}\n📱 *Whats:* {whatsapp}\n⚖️ *Status:* {resultado}")
-
-        # MOSTRAR CALENDLY APÓS SUCESSO
+        with st.spinner('⚖️ Analisando legislação e critérios para o seu inventário...'):
+            time.sleep(2.5) # O tempo (em segundos) que o "carregando" vai aparecer
+        
+        # 4. MOSTRAR CALENDLY
         st.markdown("---")
         st.markdown("### Agende sua Reunião Estratégica:")
-        # Troque 'SEU-LINK' pelo seu link real do Calendly
         calendly_url = "https://calendly.com/vasconcelosmaia/30min" 
         
         components.html(
