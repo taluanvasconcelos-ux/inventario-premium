@@ -1,10 +1,21 @@
 import streamlit as st
+
+# Código para esconder o "Made with Streamlit" e o menu
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 import requests
 import gspread
 import json
 import streamlit.components.v1 as components
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+
 
 # -----------------------------
 # CONFIGURAÇÃO DA PÁGINA
