@@ -167,17 +167,21 @@ st.markdown('<div class="subtitle">Descubra em poucos minutos se seu caso pode s
 # CTA topo
 
 st.markdown("""
-
-<div class="cta">
-
-    <a href="https://calendly.com/SEU-LINK" target="_blank">
-
-        AGENDAR AGORA MESMO UMA REUNIÃO COM UM ESPECIALISTA
-
+<div style="text-align:center; margin-top:20px;">
+    <a href="https://calendly.com/SEU-LINK" target="_blank"
+    style="
+        background-color:#0A2540;
+        color:white;
+        padding:14px 28px;
+        border-radius:10px;
+        text-decoration:none;
+        font-weight:bold;
+        font-size:16px;
+        display:inline-block;
+    ">
+        AGENDAR AGORA UMA REUNIÃO
     </a>
-
 </div>
-
 """, unsafe_allow_html=True)
 
 
