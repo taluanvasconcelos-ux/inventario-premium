@@ -90,18 +90,17 @@ def salvar_google(dados):
 # -----------------------------
 # FORMULÁRIO COM CHECKBOXES DESATIVADOS (INDEX=NONE)
 # -----------------------------
-st.markdown('<div class="section-box">', unsafe_allow_html=True)
 with st.form("form_analise"):
     st.subheader("📍 Pré-Análise do Caso")
     
     nome = st.text_input("Nome completo")
     whatsapp = st.text_input("WhatsApp (com DDD)")
+    email = st.text_input("E-mail profissional") # <-- CAMPO NOVO
     
     st.write("**Responda abaixo (seleção obrigatória):**")
     
     c1, c2 = st.columns(2)
     with c1:
-        # index=None deixa a opção desmarcada por padrão
         herdeiro = st.radio("Existe herdeiro incapaz (menor)?", ["Não", "Sim"], index=None)
         consenso = st.radio("Todos estão de acordo com a divisão?", ["Sim", "Não"], index=None)
     with c2:
@@ -115,27 +114,36 @@ with st.form("form_analise"):
 # LÓGICA DE PROCESSAMENTO
 # -----------------------------
 if submit:
-    # Validação de campos vazios
-    if None in [herdeiro, consenso, bens, testamento] or not nome or not whatsapp:
-        st.error("⚠️ Por favor, preencha todos os campos e selecione todas as opções antes de prosseguir.")
+    # Adicionámos o 'email' na verificação de campos vazios
+    if None in [herdeiro, consenso, bens, testamento] or not nome or not whatsapp or not email:
+        st.error("⚠️ Por favor, preencha todos os campos (incluindo o e-mail) antes de prosseguir.")
     elif not lgpd:
         st.error("⚠️ Você precisa autorizar o contato (LGPD) para ver o resultado.")
     else:
-        # Classificação Jurídica
+        # Lógica de classificação (mantém-se a mesma)
         if herdeiro == "Sim" or consenso == "Não":
-            resultado = "Judicial (Necessário processo em Juízo)"
-            st.warning(f"### Resultado: {resultado}")
+            resultado = "Judicial"
         elif bens == "Não":
-            resultado = "Inventário Negativo (Administrativo)"
-            st.info(f"### Resultado: {resultado}")
+            resultado = "Inventário Negativo"
         else:
-            resultado = "Extrajudicial (Forte viabilidade para Cartório)"
-            st.success(f"### Resultado: {resultado}")
-            st.balloons()
+            resultado = "Extrajudicial"
+        
+        data_hora = datetime.now().strftime("%d/%m/%Y %H:%M")
+        
+        # ATUALIZADO: Enviando o e-mail para o Google Sheets
+        # Certifique-se de que a sua folha tem colunas suficientes
+        salvar_google([nome, whatsapp, email, resultado, data_hora])
+        
+        # ATUALIZADO: Enviando o e-mail para o Telegram
+        msg = f"🚀 *Novo Lead:*\n👤 *Nome:* {nome}\n📧 *E-mail:* {email}\n📱 *Whats:* {whatsapp}\n⚖️ *Status:* {resultado}"
+        enviar_telegram(msg)
+        
+        st.success(f"### Resultado: {resultado}")
+        st.balloons()
         
         # Salvando Leads
         data_hora = datetime.now().strftime("%d/%m/%Y %H:%M")
-        salvar_google([nome, whatsapp, resultado, data_hora])
+        salvar_google([nome, whatsapp, e-mail, cidade, estado, resultado, data_hora])
         enviar_telegram(f"🚀 *Novo Lead:* {nome}\n📱 *Whats:* {whatsapp}\n⚖️ *Status:* {resultado}")
 
         # MOSTRAR CALENDLY APÓS SUCESSO
