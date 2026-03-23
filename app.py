@@ -89,7 +89,7 @@ st.caption("Ou preencha o formulário para análise")
 
 st.markdown("""
 <div style="text-align:center; margin-top:15px;">
-    <a href="wa.me/message/YZO4OMPNQZNSE1?text=Olá,%20quero%20analisar%20meu%20caso%20de%20inventário"
+    <a href="wa.me/5583996498366"
     target="_blank"
     style="
         background-color:#25D366;
@@ -237,7 +237,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div style="text-align:center; margin-top:15px;">
-    <a href="wa.me/message/YZO4OMPNQZNSE1?text=Olá,%20quero%20analisar%20meu%20caso%20de%20inventário"
+    <a href="wa.me/5583996498366"
     target="_blank"
     style="
         background-color:#25D366;
