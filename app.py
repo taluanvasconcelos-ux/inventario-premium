@@ -158,7 +158,7 @@ with col2:
 
 # -----------------------------
 
-st.markdown('<div class="main-title">Inventário em Cartório de Forma Rápida</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">Inventário em Cartório de Forma Extrajudicial</div>', unsafe_allow_html=True)
 
 st.markdown('<div class="subtitle">Descubra em poucos minutos se seu caso pode ser resolvido sem processo judicial</div>', unsafe_allow_html=True)
 
@@ -535,7 +535,6 @@ st.markdown("""
 <p style='text-align:center; font-size:12px; color:gray;'>
 
 © 2026 Vasconcelos Maia | Soluções Jurídicas. Todos os direitos reservados.  
-
 WhatsApp: +55 (83) 99649-8366
 
 </p>
