@@ -126,7 +126,7 @@ if submit:
             resultado = "Judicial"
         elif bens == "Não":
             resultado = "Inventário Negativo"
-      else:
+        else:
         # Lógica de classificação
         if herdeiro == "Sim" or consenso == "Não":
             resultado = "Judicial"
