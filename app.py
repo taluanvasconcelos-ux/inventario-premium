@@ -96,7 +96,7 @@ with st.form("form_analise"):
     
     nome = st.text_input("Nome completo")
     whatsapp = st.text_input("WhatsApp (com DDD)")
-    email = st.text_input("E-mail profissional") # <-- CAMPO NOVO
+    email = st.text_input("E-mail") # <-- CAMPO NOVO
     
     st.write("**Responda abaixo (seleção obrigatória):**")
     
