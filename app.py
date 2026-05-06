@@ -1,180 +1,76 @@
 import streamlit as st
-import requests
-import gspread
-import json
 import streamlit.components.v1 as components
-from oauth2client.service_account import ServiceAccountCredentials
-from datetime import datetime
 
 
-# -----------------------------
-# CONFIGURAÇÃO DA PÁGINA
-# -----------------------------
+NEW_SITE_URL = "https://inventarioextra.vercel.app/formulario"
+
 st.set_page_config(
-    page_title="Inventário Extrajudicial | Vasconcelos Maia",
+    page_title="Inventário Extrajudicial | Taluã Maia",
     layout="centered",
-    page_icon="⚖️"
+    page_icon="⚖️",
 )
 
-# -----------------------------
-# CSS PREMIUM (DESIGN)
-# -----------------------------
-st.markdown("""
-<style>
-    /* Remove espaços vazios no topo e laterais */
-    .block-container {
-        padding-top: 1rem !important;
-        padding-bottom: 0rem !important;
-        max-width: 50rem !important;
-    }
-    
-    /* Remove a barra branca/espaço em cima do formulário */
-    [data-testid="stForm"] {
-        margin-top: -20px !important;
-        padding: 20px !important;
-    }
+components.html(
+    f"""
+    <script>
+      window.top.location.href = "{NEW_SITE_URL}";
+    </script>
+    <meta http-equiv="refresh" content="0; url={NEW_SITE_URL}" />
+    """,
+    height=0,
+)
 
-    /* Ajusta o título para não empurrar o form para baixo */
-    .main-title { 
-        text-align: center; 
-        font-size: 32px; 
-        font-weight: 700; 
-        margin-bottom: 0px !important; 
-    }
-    
-    .subtitle { 
-        text-align: center; 
-        font-size: 16px; 
-        color: #666; 
-        margin-bottom: 10px !important; 
-    }
+st.markdown(
+    """
+    <style>
+      .block-container {
+        max-width: 720px;
+        padding-top: 5rem;
+      }
 
-    /* Esconde o cabeçalho padrão do Streamlit para ganhar espaço */
-    header {visibility: hidden;}
-    footer {visibility: hidden;}
-</style>
-""", unsafe_allow_html=True)
+      .redirect-card {
+        border: 1px solid #d8c7a5;
+        border-radius: 12px;
+        padding: 32px;
+        background: #fffaf1;
+        text-align: center;
+        color: #1c1917;
+      }
 
-# -----------------------------
-# LOGO E CABEÇALHO
-# -----------------------------
-# 1. Logo
-col1, col2, col3 = st.columns([1, 1.2, 1])
-with col2:
-    st.image("logo.png", use_container_width=True)
+      .redirect-card h1 {
+        font-size: 30px;
+        line-height: 1.2;
+        margin-bottom: 12px;
+      }
 
-# 2. Títulos (fora de qualquer container ou form)
-st.markdown('<h1 class="main-title">Inventário Extrajudicial</h1>', unsafe_allow_html=True)
+      .redirect-card p {
+        color: #57534e;
+        font-size: 16px;
+        line-height: 1.7;
+      }
 
+      .redirect-card a {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 18px;
+        border-radius: 8px;
+        background: #14110c;
+        color: #f3dfad !important;
+        text-decoration: none;
+        font-weight: 700;
+      }
+    </style>
 
-# -----------------------------
-# INTEGRAÇÕES (SAFE)
-# -----------------------------
-def enviar_telegram(msg):
-    try:
-        token = st.secrets["TELEGRAM_TOKEN"]
-        chat_id = st.secrets["TELEGRAM_CHAT_ID"]
-        url = f"https://api.telegram.org/bot{token}/sendMessage"
-        requests.post(url, data={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
-    except: pass
-
-def salvar_google(dados):
-    try:
-        creds_dict = json.loads(st.secrets["GOOGLE_CREDENTIALS"])
-        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-        client = gspread.authorize(creds)
-        sheet = client.open("Leads Inventário").sheet1
-        sheet.append_row(dados)
-    except: pass
-
-# -----------------------------
-# FORMULÁRIO COM CHECKBOXES DESATIVADOS (INDEX=NONE)
-# -----------------------------
-with st.form("form_analise"):
-    st.subheader("📍 Pré-Análise do Caso")
-    
-    nome = st.text_input("Nome completo")
-    whatsapp = st.text_input("WhatsApp (com DDD)")
-    email = st.text_input("E-mail") # <-- CAMPO NOVO
-    
-    st.write("**Responda abaixo (seleção obrigatória):**")
-    
-    c1, c2 = st.columns(2)
-    with c1:
-        herdeiro = st.radio("Existe herdeiro incapaz (menor)?", ["Não", "Sim"], index=None)
-        consenso = st.radio("Todos estão de acordo com a divisão?", ["Sim", "Não"], index=None)
-    with c2:
-        bens = st.radio("Existem bens a partilhar?", ["Sim", "Não"], index=None)
-        testamento = st.radio("Existe testamento?", ["Não", "Sim", "Não sei"], index=None)
-    
-    lgpd = st.checkbox("Autorizo o contato para fins de análise jurídica.")
-    submit = st.form_submit_button("ANALISAR MEU CASO AGORA")
-
-# -----------------------------
-# LÓGICA DE PROCESSAMENTO
-# -----------------------------
-# -----------------------------
-# LÓGICA DE PROCESSAMENTO
-# -----------------------------
-if submit:
-    # Verifica campos vazios
-    if None in [herdeiro, consenso, bens, testamento] or not nome or not whatsapp or not email:
-        st.error("⚠️ Por favor, preencha todos os campos (incluindo o e-mail) antes de prosseguir.")
-    elif not lgpd:
-        st.error("⚠️ Você precisa autorizar o contato (LGPD) para ver o resultado.")
-    else:
-        # Tudo ok! Começa o processamento
-        import time
-        
-        with st.spinner('⚖️ Analisando legislação e critérios para o seu inventário...'):
-            # Lógica de classificação
-            if herdeiro == "Sim" or consenso == "Não":
-                resultado = "Judicial"
-            elif bens == "Não":
-                resultado = "Inventário Negativo"
-            else:
-                resultado = "Extrajudicial"
-            
-            data_hora = datetime.now().strftime("%d/%m/%Y %H:%M")
-            time.sleep(2.5) # Efeito de carregamento
-        
-        # 1. Enviar para Google Sheets e Telegram
-        salvar_google([nome, whatsapp, email, resultado, data_hora])
-        
-        msg = f"🚀 *Novo Lead:*\n👤 *Nome:* {nome}\n📧 *E-mail:* {email}\n📱 *Whats:* {whatsapp}\n⚖️ *Status:* {resultado}"
-        enviar_telegram(msg)
-        
-        # 2. Mostrar Resultado
-        st.success(f"### Resultado: {resultado}")
-        st.snow()
-        
-        # 3. MOSTRAR CALENDLY
-        st.markdown("---")
-        st.markdown("### Agende sua Reunião Estratégica:")
-        calendly_url = "https://calendly.com/vasconcelosmaia/30min" 
-        
-        components.html(
-            f"""
-            <div class="calendly-inline-widget" data-url="{calendly_url}" style="min-width:320px;height:630px;"></div>
-            <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-            """,
-            height=650,
-        )
-
-# -----------------------------
-# BOTÕES DE RODAPÉ (FORA DO IF SUBMIT)
-# -----------------------------
-st.markdown("<h4 style='text-align:center; margin-top:30px;'>Precisa de ajuda imediata?</h4>", unsafe_allow_html=True)
-
-link_wa = "https://wa.me/5583996498366?text=Olá! Gostaria de falar com um especialista sobre inventário."
-link_cal = "https://calendly.com/vasconcelosmaia/30min" 
-
-html_botoes = f"""
-<div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
-    <a href="{link_wa}" target="_blank" style="background-color: #25D366; color: white !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; min-width: 210px; text-align: center;">💬 WHATSAPP AGORA</a>
-    <a href="{link_cal}" target="_blank" style="background-color: #0A2540; color: white !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; min-width: 210px; text-align: center; border: 1px solid #333;">🗓️ MARCAR REUNIÃO AGORA</a>
-</div>
-"""
-st.markdown(html_botoes, unsafe_allow_html=True)
-st.markdown(f"""<div style='text-align:center;'><hr>© {datetime.now().year} Vasconcelos Maia | Soluções Jurídicas  - Atendimento em todo Brasil e Exterior</div>""", unsafe_allow_html=True)
+    <div class="redirect-card">
+      <h1>Redirecionando para o novo diagnóstico sucessório</h1>
+      <p>
+        A triagem de inventário extrajudicial agora está em uma nova página,
+        com análise mais completa, LGPD/GDPR, WhatsApp e agendamento de reunião.
+      </p>
+      <a href="https://inventarioextra.vercel.app/formulario" target="_top">
+        Acessar novo site
+      </a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
