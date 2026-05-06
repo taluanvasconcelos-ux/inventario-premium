@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 
-NEW_SITE_URL = "https://inventarioextra.vercel.app/formulario"
+NEW_SITE_URL = "https://inventarioextrajudicial.vercel.app/formulario"
 
 st.set_page_config(
     page_title="Inventário Extrajudicial | Taluã Maia",
@@ -67,7 +67,7 @@ st.markdown(
         A triagem de inventário extrajudicial agora está em uma nova página,
         com análise mais completa, LGPD/GDPR, WhatsApp e agendamento de reunião.
       </p>
-      <a href="https://inventarioextra.vercel.app/formulario" target="_top">
+      <a href="https://inventarioextrajudicial.vercel.app/formulario" target="_top">
         Acessar novo site
       </a>
     </div>
